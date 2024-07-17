@@ -7,6 +7,10 @@ import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { GithubIcon } from "@/components/icons";
 
+import Login from "@/components/login/Login";
+import { BlogGrid } from "@/components/blog/blogGrid";
+import { ContentGrid } from "@/components/content/contentGrid";
+
 export default function Home() {
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -14,12 +18,8 @@ export default function Home() {
         <h1 className={title()}>Make&nbsp;</h1>
         <h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
         <br />
-        <h1 className={title()}>
-          websites regardless of your design experience.
-        </h1>
-        <h2 className={subtitle({ class: "mt-4" })}>
-          Beautiful, fast and modern React UI library.
-        </h2>
+        <h1 className={title()}>websites regardless of your design experience.</h1>
+        <h2 className={subtitle({ class: "mt-4" })}>Beautiful, fast and modern React UI library.</h2>
       </div>
 
       <div className="flex gap-3">
@@ -51,6 +51,9 @@ export default function Home() {
           </span>
         </Snippet>
       </div>
+      <Login />
+      <ContentGrid />
+      <BlogGrid />
     </section>
   );
 }
