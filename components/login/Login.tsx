@@ -22,7 +22,7 @@ import { ErrorResponse, LoginResponse } from "@/types";
 import { loginUser, loginVendor } from "@/actions/auth/login";
 import { LockIcon, MailIcon } from "../icons";
 
-export default function Login() {
+export const Login = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selected, setSelected] = useState<string | number>("user"); // Ensure state type is string | number
 
@@ -77,8 +77,9 @@ export default function Login() {
 
   return (
     <>
-      <Button onPress={onOpen} className="border-2 border-sky-500" color="default">
-        Login
+      <Button onPress={onOpen} className="relative overflow-hidden">
+        <span className="absolute inset-0 bg-indigo-300 dark:bg-indigo-500 blur-md"></span>
+        <span className="relative">Login</span>
       </Button>
 
       <Modal onClose={customOnClose} isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
@@ -196,4 +197,4 @@ export default function Login() {
       </Modal>
     </>
   );
-}
+};
