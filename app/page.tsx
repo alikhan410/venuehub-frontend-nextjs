@@ -1,15 +1,17 @@
-import { BlogGrid } from "@/components/blog/blogGrid";
+import { Blog } from "@/components/blog/blog";
 import { ContentGrid } from "@/components/content/contentGrid";
+import { Cta } from "@/components/cta/cta";
 import { Hero } from "@/components/hero/hero";
 import { Testimonial } from "@/components/testimonial/testimonial";
 
 export default async function Home() {
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
+    <>
       <Hero />
+      <Cta />
       <ContentGrid />
       <Testimonial />
-      <BlogGrid />
-    </section>
+      <Blog />
+    </>
   );
 }

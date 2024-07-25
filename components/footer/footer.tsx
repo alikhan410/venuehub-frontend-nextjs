@@ -4,7 +4,7 @@ import { Link } from "@nextui-org/link";
 
 export const Footer = () => {
   return (
-    <footer className="bg-white dark:bg-black py-8">
+    <footer className="bg-stone-100 dark:bg-black py-8">
       <div className="container mx-auto px-4 md:flex md:justify-between">
         <div className="mb-8 md:mb-0 md:w-1/3">
           <h1 className="text-2xl font-bold">
@@ -41,8 +41,19 @@ export const Footer = () => {
         <div className="md:w-1/3">
           <h2 className="text-xl font-semibold">Contact Us</h2>
           <form className="flex flex-col mt-4 items-center">
-            <Input type="email" name="email" className="w-full p-2 mb-4  rounded" placeholder="Your email address..." />
-            <Textarea name="message" className="w-full p-2 mb-4 rounded" placeholder="Your message..."></Textarea>
+            <Input
+              type="email"
+              name="email"
+              color="primary"
+              className="w-full p-2 mb-4  rounded"
+              placeholder="Your email address..."
+            />
+            <Textarea
+              color="primary"
+              name="message"
+              className="w-full p-2 mb-4 rounded"
+              placeholder="Your message..."
+            ></Textarea>
             <Button className="w-28" type="submit">
               Send
             </Button>

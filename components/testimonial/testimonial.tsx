@@ -5,7 +5,7 @@ import { title } from "../primitives";
 
 export const Testimonial = function () {
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col mx-24">
       <div className="flex justify-between mb-24">
         <h2 className={title({ size: "md" })}>
           What People are
