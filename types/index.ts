@@ -14,7 +14,9 @@ export type ErrorResponse = {
   error: string;
   message: string;
 };
-
+export type ErrorResponseProp = {
+  response: ErrorResponse;
+};
 export type Session = {
   jwt: String;
 };
@@ -66,4 +68,24 @@ export interface Feedback {
   name: String;
   title: String;
   img: String;
+}
+export enum PaymentStatus {
+  "PAID",
+  "FAILED",
+  "PENDING",
+}
+export enum BookingStatus {
+  "BOOKED",
+  "FAILED",
+  "RESERVED",
+  "COMPLETED",
+}
+export interface VenueProps {
+  id: number;
+  imageUrl: String;
+  title: String;
+  estimate: String;
+}
+export interface VenuePropsList {
+  venueList: VenueProps[];
 }

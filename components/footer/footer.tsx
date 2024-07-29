@@ -32,7 +32,7 @@ export const Footer = () => {
               </Link>
             </li>
             <li className="mt-2">
-              <Link href="#" className="text-gray-700 dark:text-slate-300">
+              <Link href="/contact-us" className="text-gray-700 dark:text-slate-300">
                 Contact
               </Link>
             </li>

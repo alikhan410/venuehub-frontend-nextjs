@@ -13,6 +13,8 @@ import { NavProvider } from "@/context/NavbarContext";
 import { getCurrentUser } from "@/actions/auth/getCurrentUser";
 import { NavbarOld } from "@/components/navbar/navbarOld";
 import { Footer } from "@/components/footer/footer";
+import Banner from "@/components/banner/banner";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -44,11 +46,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head />
       <body className={clsx("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          {/* <Banner /> */}
           <NavProvider>
             <div className="relative flex flex-col h-screen">
               <Navbar currentUser={currentUser} />
               {/* <NavbarOld /> */}
               <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">{children}</main>
+              <Toaster richColors closeButton />
               <Divider />
               <Footer />
               {/* <footer className="w-full flex items-center justify-center py-3">

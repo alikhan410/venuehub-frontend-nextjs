@@ -22,12 +22,13 @@ export const Cta = function () {
           </svg>
           <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
             <h2 className="text-3xl font-bold tracking-tight  sm:text-4xl">
-              Boost your productivity.
+              Boost your event planning.
               <br />
               Start using our app today.
             </h2>
             <p className="mt-6 text-lg leading-8">
-              Ac euismod vel sit maecenas id pellentesque eu sed consectetur. Malesuada adipiscing sagittis vel nulla.
+              Enhance your event planning with VenueHub’s intuitive platform. Our solution features personalized
+              dashboards for both users and vendors, designed to simplify venue booking providing seamless experience.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
               <Button as={Link} href="#" className="relative overflow-hidden">
@@ -45,7 +46,7 @@ export const Cta = function () {
           <div className="relative mt-16 h-80 lg:mt-8">
             <img
               alt="App screenshot"
-              src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
+              src="https://cdn.shopify.com/s/files/1/0668/0897/1565/files/dashboard-vendor-dark.png?v=1722285589"
               width={1824}
               height={1080}
               className="absolute left-0 top-0 w-[57rem] max-w-none rounded-md bg-white/5 ring-1 ring-white/10"
