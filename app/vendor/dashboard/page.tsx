@@ -27,7 +27,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { PaymentTable } from "@/components/paymentTable/table";
+import { PaymentTable } from "@/components/paymentTable/paymentTable";
 import { RecentBookings } from "@/components/recentBookings/recentBookings";
 
 export default function Dashboard() {

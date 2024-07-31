@@ -89,3 +89,25 @@ export interface VenueProps {
 export interface VenuePropsList {
   venueList: VenueProps[];
 }
+
+export interface VenueItemProp {
+  id: number;
+  name: String;
+  location: String;
+  capacity: number;
+  estimate: String;
+  images: ImageProp[];
+  description: String;
+  username: String;
+}
+export interface ImageListProp {
+  images: ImageProp[];
+}
+export interface ImageProp {
+  imageUrl: String;
+  id: number;
+}
+
+export interface BookingDates {
+  bookingDate: String;
+}
