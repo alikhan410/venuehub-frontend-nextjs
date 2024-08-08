@@ -1,9 +1,17 @@
 "use server";
-
+import { Logger, ILogObj } from "tslog";
+const logger: Logger<ILogObj> = new Logger({
+  hideLogPositionForProduction: true,
+  name: "actions/venue/getVenues.ts",
+});
 import { UserDetails, VendorDetails } from "@/types";
 import { cookies } from "next/headers";
 
 export const signupUser = async (userDetails: UserDetails) => {
+  const logger: Logger<ILogObj> = new Logger({
+    hideLogPositionForProduction: true,
+    name: "actions/venue/getVenues.ts",
+  });
   const myCookies = cookies();
   if (myCookies.get("session")) {
     myCookies.delete("session");
@@ -37,6 +45,10 @@ export const signupUser = async (userDetails: UserDetails) => {
 };
 
 export const signupVendor = async (vendorDetails: VendorDetails) => {
+  const logger: Logger<ILogObj> = new Logger({
+    hideLogPositionForProduction: true,
+    name: "actions/venue/getVenues.ts",
+  });
   const myCookies = cookies();
   if (myCookies.get("session")) {
     myCookies.delete("session");

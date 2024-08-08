@@ -2,8 +2,16 @@
 
 import { ErrorResponse, LoginResponse } from "@/types";
 import { cookies } from "next/headers";
-
+import { Logger, ILogObj } from "tslog";
+const logger: Logger<ILogObj> = new Logger({
+  hideLogPositionForProduction: true,
+  name: "actions/venue/getVenues.ts",
+});
 export const loginUser = async (username: string, password: string): Promise<LoginResponse | ErrorResponse> => {
+  const logger: Logger<ILogObj> = new Logger({
+    hideLogPositionForProduction: true,
+    name: "actions/venue/getVenues.ts",
+  });
   const myCookies = cookies();
   if (myCookies.get("session")) {
     myCookies.delete("session");
@@ -39,6 +47,10 @@ export const loginUser = async (username: string, password: string): Promise<Log
 };
 
 export const loginVendor = async (username: String, password: String) => {
+  const logger: Logger<ILogObj> = new Logger({
+    hideLogPositionForProduction: true,
+    name: "actions/venue/getVenues.ts",
+  });
   const myCookies = cookies();
   if (myCookies.get("session")) {
     myCookies.delete("session");

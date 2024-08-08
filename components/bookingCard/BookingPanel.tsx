@@ -64,23 +64,29 @@ export default function BookingPanel({
 
     return isUnAvailable;
   };
-  const dateHandler = (e: DateValue): void | undefined => {
-    const year = e.year;
-    const month = e.month.toString().padStart(2, "0");
-    const day = e.day.toString().padStart(2, "0");
+  const dateHandler = (e: DateValue): void => {
+    try {
+      const year = e.year;
+      const month = e.month.toString().padStart(2, "0");
+      const day = e.day.toString().padStart(2, "0");
 
-    setDateString(`${year}-${month}-${day}`);
+      const formattedDate = `${year}-${month}-${day}`;
+      setDateString(formattedDate);
+
+      const isDateEmpty = formattedDate === "";
+      const isGuestExceeded = guest > 49;
+
+      setDisabled(isDateEmpty || isGuestExceeded);
+      setError(isDateEmpty ? <Chip color="danger">Please select a date</Chip> : null);
+
+      if (!isDateEmpty && guest > 49) {
+        setDisabled(false);
+      }
+    } catch (error) {
+      setError(<Chip color="danger">Please enter a valid date</Chip>);
+    }
   };
 
-  // const guestHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-  //   if (e.currentTarget.value > 49) {
-  //     setGuest(e.currentTarget.value);
-  //     setError(null);
-  //     setDisabled(false);
-  //   } else {
-  //     setError(<Chip color="danger">Guest must be more than 50</Chip>);
-  //   }
-  // };
   const guestHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const value = parseInt(e.currentTarget.value, 10); // Convert the input value to a number
 
@@ -90,8 +96,10 @@ export default function BookingPanel({
       setDisabled(false);
     } else {
       setError(<Chip color="danger">Guest must be more than 50</Chip>);
+      setDisabled(true);
     }
   };
+
   return (
     <Card className="flex w-96">
       <CardHeader>

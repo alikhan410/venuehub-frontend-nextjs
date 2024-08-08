@@ -1,7 +1,12 @@
+"use server";
 import { CurrentUserResponse, ErrorResponse, Session } from "@/types";
 import { sessionCheck } from "@/utils/sessionCheck";
-
+import { Logger, ILogObj } from "tslog";
 export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
+  const logger: Logger<ILogObj> = new Logger({
+    hideLogPositionForProduction: true,
+    name: "actions/venue/getVenues.ts",
+  });
   console.log("------------------------------------------------");
   const fallback: CurrentUserResponse = { username: null, roles: [], loggedInAs: null, isLogged: false };
   const session = await sessionCheck();

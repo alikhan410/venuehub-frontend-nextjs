@@ -82,9 +82,9 @@ export enum BookingStatus {
 }
 export interface VenueProps {
   id: number;
-  imageUrl: String;
-  title: String;
-  estimate: String;
+  imageUrl: string;
+  title: string;
+  estimate: string;
 }
 export interface VenuePropsList {
   venueList: VenueProps[];
@@ -92,22 +92,28 @@ export interface VenuePropsList {
 
 export interface VenueItemProp {
   id: number;
-  name: String;
-  location: String;
+  name: string;
+  location: string;
   capacity: number;
-  estimate: String;
-  images: ImageProp[];
+  estimate: string;
+  imageUris: ImageUri[];
   description: String;
-  username: String;
+  username: string;
 }
-export interface ImageListProp {
-  images: ImageProp[];
-}
-export interface ImageProp {
-  imageUrl: String;
+// export interface ImageUris {
+//   images: ImageUri[];
+// }
+export interface ImageUri {
+  uri: String;
   id: number;
 }
 
 export interface BookingDates {
   bookingDate: String;
+}
+export interface DoRequest {
+  method: string;
+  uri: string;
+  body: Object | undefined;
+  session: Boolean;
 }

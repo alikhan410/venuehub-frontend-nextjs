@@ -1,4 +1,4 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": ["addvenue", "allvenues", "myvenues", "nextui", "Pressable", "Signup", "singup", "VENUEHUB"]
+  "cSpell.words": ["addvenue", "allvenues", "myvenues", "nextui", "Pressable", "Signup", "singup", "tslog", "VENUEHUB"]
 }
