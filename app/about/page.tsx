@@ -2,7 +2,7 @@ import { title } from "@/components/primitives";
 
 export default function AboutPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
+    <div className="px-4 py-8">
       <div className={title()} style={{ fontSize: "2rem", fontWeight: "bold" }}>
         About Us
       </div>
@@ -16,7 +16,7 @@ export default function AboutPage() {
         your venue booking experience. Our platform connects you with a diverse range of venues across Pakistan,
         ensuring that you find the perfect location for your event with ease.
       </p>
-      <p className="text-center text-md text-gray-600 font-sans py-3">
+      <p className="text-center text-md font-sans py-3">
         At VenueHub, we are committed to providing a seamless booking process for both customers and venue owners. Our
         user-friendly interface allows customers to browse, compare, and book venues effortlessly, while venue owners
         benefit from our efficient management tools designed to optimize their bookings and enhance their online

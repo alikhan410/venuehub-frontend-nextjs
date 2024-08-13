@@ -2,30 +2,37 @@
 import { CurrentUserResponse, ErrorResponse, Session } from "@/types";
 import { sessionCheck } from "@/utils/sessionCheck";
 import { Logger, ILogObj } from "tslog";
+import { colorStatus } from "@/utils/colorStatus";
+
 export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
   const logger: Logger<ILogObj> = new Logger({
     hideLogPositionForProduction: true,
-    name: "actions/venue/getVenues.ts",
+    name: "actions/auth/getCurrentUser.ts",
   });
-  console.log("------------------------------------------------");
+
+  console.log(
+    "----------------------------------------------------------------------------------------------------------"
+  );
+
   const fallback: CurrentUserResponse = { username: null, roles: [], loggedInAs: null, isLogged: false };
   const session = await sessionCheck();
+
   if ((session as ErrorResponse).error) return fallback;
+
   try {
     const res = await fetch(`${process.env.HOST}/current-user`, {
       cache: "no-store",
       method: "GET",
       headers: { Authorization: `Bearer ${(session as Session).jwt}` },
     });
-
-    const data = await res.json();
+    logger.info(`got ${colorStatus(res.status)} from /current-user`);
 
     if (res.status != 200) {
-      console.log(`got ${res.status} from /current-user`);
       return fallback;
     }
 
-    console.log(`got ${res.status} from /current-user`);
+    const data = await res.json();
+
     const currentUser: CurrentUserResponse = { ...data, isLogged: true };
 
     return currentUser;

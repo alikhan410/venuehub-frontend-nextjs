@@ -15,7 +15,7 @@ import {
 
 import { useState } from "react";
 import { SignupForm } from "./signupForm";
-import { signupUser, signupVendor } from "@/actions/auth/singup";
+import { register } from "@/actions/auth/register";
 import { ErrorResponse } from "@/types/index";
 
 export const Signup = () => {
@@ -37,7 +37,7 @@ export const Signup = () => {
       lastName: formData.get("lastName")?.toString() || "",
     };
 
-    const res = await signupUser(details);
+    const res = await register("/user/register", details);
 
     if ((res as ErrorResponse).error) {
       setErrorUser(<Chip color="danger">{(res as ErrorResponse).message}</Chip>);
@@ -59,10 +59,9 @@ export const Signup = () => {
       lastName: formData.get("lastName")?.toString() || "",
     };
 
-    const res = await signupVendor(details);
+    const res = await register("/vendor/register", details);
 
     if ((res as ErrorResponse).error) {
-      console.log(res);
       setErrorVendor(<Chip color="danger">{(res as ErrorResponse).message}</Chip>);
     } else {
       setErrorVendor(null);

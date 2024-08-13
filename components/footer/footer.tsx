@@ -22,7 +22,7 @@ export const Footer = () => {
               Home
             </Link>
             <li className="mt-2">
-              <Link href="#" className="text-gray-700 dark:text-slate-300">
+              <Link href="/about" className="text-gray-700 dark:text-slate-300">
                 About
               </Link>
             </li>

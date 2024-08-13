@@ -5,35 +5,42 @@ import { parseDate } from "@internationalized/date";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { addBooking } from "@/actions/booking/addBooking";
+import { AddBookingBody, BookingStatus, ErrorResponse } from "@/types";
 
 export default function ReservationForm() {
   const searchParams = useSearchParams();
-  console.log(searchParams);
 
-  const [phone, setPhone] = useState<String>("");
+  const [phone, setPhone] = useState<string>("");
   const [error, setError] = useState<JSX.Element | null>(null);
   const router = useRouter();
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // const phone = searchParams.get("phone");
+    const bookingDate = searchParams.get("date");
+    //FIX ME
+    const guests = parseInt(searchParams.get("guests") || "0");
+    const venueId = parseInt(searchParams.get("venueId") || "0");
 
-    router.push("/user/bookings");
-    // const res = await formHandler(
-    //   searchParams.get("date"),
-    //   searchParams.get("venueId"),
-    //   searchParams.get("guests"),
-    //   phone
-    // );
+    if (phone && bookingDate && guests && venueId) {
+      const body: AddBookingBody = {
+        phone,
+        status: BookingStatus.RESERVED,
+        bookingDate,
+        guests,
+      };
 
-    // console.log(res);
+      const res = await addBooking(body, venueId);
 
-    // if (res.error) {
-    //   setError(<Chip color="danger">{res.message}</Chip>);
-    // } else {
-    //   setError(null);
-    //   localStorage.setItem("item", "mybookings");
-    //   router.push("/bookings");
-    // }
+      if ((res as ErrorResponse).error) {
+        setError(<Chip color="danger">{(res as ErrorResponse).message}</Chip>);
+      } else {
+        setError(null);
+        localStorage.setItem("item", "mybookings");
+        router.push("/user/bookings");
+      }
+    }
   };
 
   return (
@@ -75,7 +82,7 @@ export default function ReservationForm() {
           </Button>
         </div>
       </form>
-      <Link underline="hover" color="primary" href="/how-venuehub-works">
+      <Link underline="hover" color="primary" href="/blogs/how-venuehub-works">
         You wont be charged yet*
       </Link>
     </div>

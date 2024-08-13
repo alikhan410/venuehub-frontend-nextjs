@@ -19,7 +19,7 @@ import {
 import { useState } from "react";
 import { ErrorResponse, LoginResponse } from "@/types";
 
-import { loginUser, loginVendor } from "@/actions/auth/login";
+import { login } from "@/actions/auth/login";
 import { LockIcon, MailIcon } from "../icons";
 
 export const Login = () => {
@@ -39,7 +39,8 @@ export const Login = () => {
 
     if (username == null || password == null) return;
 
-    const res = await loginUser(username.toString(), password.toString());
+    const res = await login("/user/login", username.toString(), password.toString());
+    // const res = await loginUser(username.toString(), password.toString());
 
     if ((res as ErrorResponse).status !== undefined) {
       setErrorUser(<Chip color="danger">{(res as ErrorResponse).message}</Chip>);
@@ -59,11 +60,11 @@ export const Login = () => {
 
     if (username == null || password == null) return;
 
-    const res = await loginVendor(username.toString(), password.toString());
-
-    if (res.error) {
-      setErrorVendor(<Chip color="danger">{res.message}</Chip>);
-    } else {
+    // const res = await loginVendor(username.toString(), password.toString());
+    const res = await login("/vendor/login", username.toString(), password.toString());
+    if ((res as ErrorResponse).status !== undefined) {
+      setErrorVendor(<Chip color="danger">{(res as ErrorResponse).message}</Chip>);
+    } else if ((res as LoginResponse).jwt !== undefined) {
       setErrorVendor(null);
       onClose();
     }

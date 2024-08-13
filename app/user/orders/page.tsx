@@ -5,59 +5,44 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button, Chip, Spinner } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Booking, BookingOrder, BookingStatus, ErrorResponse } from "@/types";
+import { BookingOrder, ErrorResponse, OrderStatus } from "@/types";
 import { useState, useEffect } from "react";
-import { getBookings } from "@/actions/booking/getBookings";
 import MyCustomError from "@/components/error/customError";
-import { calculateTimeLeft } from "@/utils/reservationExpiry";
-import { createPaymentIntent } from "@/actions/payment/createPaymentIntent";
+import { getOrders } from "@/actions/payment/getOrders";
 
 const colorMap: { [index: string]: any } = {
-  BOOKED: "bg-green-300 dark:bg-green-900",
-  RESERVED: "bg-yellow-300 dark:bg-yellow-900",
-  FAILED: "bg-red-300 dark:bg-red-900",
-  COMPLETED: "bg-blue-300 dark:bg-blue-900",
+  PENDING: "bg-yellow-300 dark:bg-yellow-900",
+  COMPLETED: "bg-green-300 dark:bg-green-900",
+  CANCELED: "bg-red-300 dark:bg-red-900",
 };
 
 export default function Page() {
   const router = useRouter();
-  const [data, setData] = useState<Booking[] | null>();
+  const [data, setData] = useState<BookingOrder[] | null>();
   const [error, setError] = useState<JSX.Element | null>();
 
   useEffect(() => {
     const get = async () => {
-      const res = await getBookings("/user");
+      const res = await getOrders("/user");
 
       if ((res as ErrorResponse).error) {
         setError(<MyCustomError response={res as ErrorResponse} />);
       } else {
         setError(null);
-        setData(res as Booking[]);
+        console.log(res);
+        setData(res as BookingOrder[]);
       }
     };
     get();
   }, []);
 
-  const clickHandler = async (bookingId: number) => {
-    if (!data) return;
-
+  const clickHandler = (bookingId: number) => {
+    if (data == null) return;
     const booking = data.find((d) => d.bookingId === bookingId);
-
-    if (!booking) {
+    if (booking) {
+      router.push(`/checkout?bookingid=${booking.bookingId}`);
+    } else {
       console.error(`Booking with ID ${bookingId} not found`);
-      return;
-    }
-
-    try {
-      const res = await createPaymentIntent(booking.bookingId);
-      if ((res as ErrorResponse).error) {
-        setError(<MyCustomError response={res as ErrorResponse} />);
-      } else {
-        setError(null);
-        router.push(`/checkout?orderId=${res}`);
-      }
-    } catch (error) {
-      console.error("Failed to create payment intent:", error);
     }
   };
 
@@ -82,39 +67,39 @@ export default function Page() {
       ) : (
         <Card x-chunk="dashboard-05-chunk-3" className="mb-8">
           <CardHeader className="px-7">
-            <CardTitle>Bookings</CardTitle>
-            <CardDescription>Your bookings</CardDescription>
+            <CardTitle>Orers</CardTitle>
+            <CardDescription>Your booking orders summary</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Venue Name</TableHead>
-                  <TableHead className="hidden md:table-cell">Booking Date</TableHead>
-                  <TableHead className="hidden md:table-cell">Reserved till</TableHead>
-                  <TableHead className="hidden sm:table-cell">Booking Status</TableHead>
+                  <TableHead>Booking Id</TableHead>
+                  <TableHead className="hidden md:table-cell">Vendor</TableHead>
+                  <TableHead className="hidden md:table-cell">Amount</TableHead>
+                  <TableHead className="hidden sm:table-cell">Order Status</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {data.map((d) => (
-                  <TableRow key={d.bookingId} className="pb-6">
+                  <TableRow key={d.id} className="pb-6">
                     <TableCell>
-                      <div className="font-medium">{d.venueName}</div>
+                      <div className="font-medium">{d.bookingId}</div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">{d.bookingDate}</TableCell>
-                    <TableCell className="hidden md:table-cell">{calculateTimeLeft(d.reservationExpiry)}</TableCell>
+                    <TableCell className="hidden md:table-cell">{d.vendor}</TableCell>
+                    <TableCell className="hidden md:table-cell">{d.amount}</TableCell>
 
                     <TableCell className="px-4  py-2 hidden sm:table-cell">
-                      <Chip size="sm" radius="sm" className={`text-xs font-extrabold ${colorMap[d.status]}`}>
-                        {BookingStatus[d.status]}
+                      <Chip size="sm" radius="sm" className={`text-xs font-extrabold ${colorMap[d.orderStatus]}`}>
+                        {OrderStatus[d.orderStatus]}
                       </Chip>
                     </TableCell>
                     <TableCell className="text-right">
-                      {d.status == BookingStatus.RESERVED ? (
+                      {d.orderStatus == OrderStatus.PENDING ? (
                         <Button
                           onClick={(_e) => {
-                            clickHandler(d.bookingId);
+                            clickHandler(d.id);
                           }}
                           color="primary"
                           size="sm"

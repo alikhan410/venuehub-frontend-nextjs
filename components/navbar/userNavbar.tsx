@@ -36,7 +36,7 @@ export const UserNavbar = ({ setItemActive, item, currentUser }: NavbarProps) =>
           <Link
             data-name="mybookings"
             color={item == "mybookings" ? "" : "foreground"}
-            href="/bookings"
+            href="/user/bookings"
             onClick={setItemActive}
           >
             My Bookings
@@ -54,6 +54,7 @@ export const UserNavbar = ({ setItemActive, item, currentUser }: NavbarProps) =>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
+        <ThemeSwitch/>
         <NavbarItem className="hidden lg:flex">{currentUser.isLogged ? <Logout /> : <Login />}</NavbarItem>
         <NavbarItem>{currentUser.isLogged ? "" : <Signup />}</NavbarItem>
       </NavbarContent>

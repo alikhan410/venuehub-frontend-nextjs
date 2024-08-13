@@ -5,12 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button, Chip, Spinner } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import { Booking, BookingOrder, BookingStatus, ErrorResponse } from "@/types";
+import { Booking, BookingStatus, ErrorResponse } from "@/types";
 import { useState, useEffect } from "react";
 import { getBookings } from "@/actions/booking/getBookings";
 import MyCustomError from "@/components/error/customError";
 import { calculateTimeLeft } from "@/utils/reservationExpiry";
-import { createPaymentIntent } from "@/actions/payment/createPaymentIntent";
 
 const colorMap: { [index: string]: any } = {
   BOOKED: "bg-green-300 dark:bg-green-900",
@@ -26,7 +25,7 @@ export default function Page() {
 
   useEffect(() => {
     const get = async () => {
-      const res = await getBookings("/user");
+      const res = await getBookings("/vendor");
 
       if ((res as ErrorResponse).error) {
         setError(<MyCustomError response={res as ErrorResponse} />);
@@ -38,26 +37,13 @@ export default function Page() {
     get();
   }, []);
 
-  const clickHandler = async (bookingId: number) => {
-    if (!data) return;
-
+  const clickHandler = (bookingId: number) => {
+    if (data == null) return;
     const booking = data.find((d) => d.bookingId === bookingId);
-
-    if (!booking) {
+    if (booking) {
+      router.push(`/checkout?id=${booking.bookingId}`);
+    } else {
       console.error(`Booking with ID ${bookingId} not found`);
-      return;
-    }
-
-    try {
-      const res = await createPaymentIntent(booking.bookingId);
-      if ((res as ErrorResponse).error) {
-        setError(<MyCustomError response={res as ErrorResponse} />);
-      } else {
-        setError(null);
-        router.push(`/checkout?orderId=${res}`);
-      }
-    } catch (error) {
-      console.error("Failed to create payment intent:", error);
     }
   };
 
@@ -66,34 +52,32 @@ export default function Page() {
   }
 
   // if (data == null) {
-  //   return (
-  //     <div className="mx-16 grid grid-cols-1 h-screen">
-  //       <Spinner />
-  //     </div>
-  //   );
+  //   <div className="mx-16 my-32 grid grid-cols-1 h-screen">
+  //     <Spinner />
+  //   </div>;
   // }
 
   return (
     <div className="h-screen">
       {data == null ? (
-        <div className="mx-16 grid grid-cols-1">
+        <div className="mx-16 my-32 grid grid-cols-1">
           <Spinner />
         </div>
       ) : (
         <Card x-chunk="dashboard-05-chunk-3" className="mb-8">
           <CardHeader className="px-7">
             <CardTitle>Bookings</CardTitle>
-            <CardDescription>Your bookings</CardDescription>
+            <CardDescription>Bookings from your venues</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Venue Name</TableHead>
-                  <TableHead className="hidden md:table-cell">Booking Date</TableHead>
-                  <TableHead className="hidden md:table-cell">Reserved till</TableHead>
-                  <TableHead className="hidden sm:table-cell">Booking Status</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
+                  <TableHead className="hidden md:table-cell">Customer</TableHead>
+                  <TableHead className="hidden sm:table-cell">Booking Date</TableHead>
+                  <TableHead className="hidden md:table-cell">Reserved for</TableHead>
+                  <TableHead>Booking Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -102,28 +86,14 @@ export default function Page() {
                     <TableCell>
                       <div className="font-medium">{d.venueName}</div>
                     </TableCell>
-                    <TableCell className="hidden md:table-cell">{d.bookingDate}</TableCell>
+                    <TableCell className="hidden md:table-cell">{d.username}</TableCell>
+                    <TableCell className="hidden sm:table-cell">{d.bookingDate}</TableCell>
                     <TableCell className="hidden md:table-cell">{calculateTimeLeft(d.reservationExpiry)}</TableCell>
 
-                    <TableCell className="px-4  py-2 hidden sm:table-cell">
+                    <TableCell className="px-4  py-2">
                       <Chip size="sm" radius="sm" className={`text-xs font-extrabold ${colorMap[d.status]}`}>
                         {BookingStatus[d.status]}
                       </Chip>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {d.status == BookingStatus.RESERVED ? (
-                        <Button
-                          onClick={(_e) => {
-                            clickHandler(d.bookingId);
-                          }}
-                          color="primary"
-                          size="sm"
-                        >
-                          Pay
-                        </Button>
-                      ) : (
-                        "No action"
-                      )}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -75,10 +75,10 @@ export enum PaymentStatus {
   "PENDING",
 }
 export enum BookingStatus {
-  "BOOKED",
-  "FAILED",
-  "RESERVED",
-  "COMPLETED",
+  BOOKED = "BOOKED",
+  FAILED = "FAILED",
+  RESERVED = "RESERVED",
+  COMPLETED = "COMPLETED",
 }
 export interface VenueProps {
   id: number;
@@ -116,4 +116,45 @@ export interface DoRequest {
   uri: string;
   body: Object | undefined;
   session: Boolean;
+}
+export interface AddBookingBody {
+  phone: string;
+  status: BookingStatus;
+  bookingDate: string;
+  guests: number;
+}
+export interface Booking {
+  bookingId: number;
+  username: string;
+  status: BookingStatus;
+  venueId: number;
+  venueName: string;
+  bookingDate: string;
+  reservationExpiry: string;
+}
+export interface BookingStatusResponse {
+  bookingDate: string;
+  guests: number;
+  status: BookingStatus;
+  venueName: string;
+  venueId: number;
+}
+
+export enum OrderStatus {
+  PENDING = "PENDING",
+  COMPLETED = "COMPLETED",
+  CANCELED = "CANCELED",
+}
+
+export interface BookingOrder {
+  id: number;
+  username: string;
+  vendor: string;
+  clientSecret: string;
+  amount: number;
+  bookingId: number;
+  orderStatus: OrderStatus;
+}
+export interface BookingOrderList {
+  bookingOrders: BookingOrder[];
 }

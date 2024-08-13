@@ -3,6 +3,7 @@
 import { DoRequest, ErrorResponse, Session } from "@/types";
 import { sessionCheck } from "./sessionCheck";
 import { Logger, ILogObj } from "tslog";
+import { colorStatus } from "./colorStatus";
 
 export const doRequest = async <T>({
   method,
@@ -35,7 +36,7 @@ export const doRequest = async <T>({
   try {
     const res = await fetch(`${process.env.HOST}${uri}`, fetchOptions);
 
-    logger.info(`got ${res.status} from ${uri}`);
+    logger.info(`got ${colorStatus(res.status)} from ${uri}`);
 
     const data = await res.json();
     return data;

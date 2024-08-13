@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Link, Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem } from "@nextui-org/react";
-
+import { ThemeSwitch } from "../theme-switch";
 import { NavbarProps } from "@/types";
 import { Login } from "../login/login";
 import { Logout } from "../logout/logout";
@@ -74,6 +74,7 @@ export const VendorNavbar = ({ setItemActive, item, currentUser }: NavbarProps) 
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
+        <ThemeSwitch />
         <NavbarItem className="hidden lg:flex">{currentUser.isLogged ? <Logout /> : <Login />}</NavbarItem>
         <NavbarItem>{currentUser.isLogged ? "" : <Signup />}</NavbarItem>
       </NavbarContent>

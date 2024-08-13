@@ -19,7 +19,7 @@ export const getVenues = async (): Promise<VenueItemProp[] | ErrorResponse> => {
   const response = await doRequest<{ venueList: VenueItemProp[] }>(requestOptions);
 
   if ((response as ErrorResponse).error) {
-    logger.error("Error while fetching venues, returning ErrorResponse");
+    logger.error("Error while fetching venues");
     return response as ErrorResponse;
   }
 

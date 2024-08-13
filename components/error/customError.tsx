@@ -17,7 +17,7 @@ export default function MyCustomError({ response }: ErrorResponseProp) {
           >
             Go back home
           </Link>
-          <Link href="/" className="text-sm font-semibold dark:text-white text-zinc-900">
+          <Link href="/contact-us" className="text-sm font-semibold dark:text-white text-zinc-900">
             Contact support <span aria-hidden="true">&rarr;</span>
           </Link>
         </div>
