@@ -7,8 +7,8 @@ import { NavbarProps } from "@/types";
 import { ThemeSwitch } from "../theme-switch";
 
 import { Logout } from "../logout/logout";
-import { Login } from "../login/login";
 import { Signup } from "../signup/signup";
+import { Login } from "../login/login";
 
 export const GuestNavbar = ({ setItemActive, item, currentUser }: NavbarProps) => {
   return (

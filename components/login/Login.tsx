@@ -1,5 +1,5 @@
 "use client";
-import React, { Dispatch, Key, SetStateAction } from "react";
+import React from "react";
 import {
   Modal,
   ModalContent,
@@ -22,7 +22,7 @@ import { ErrorResponse, LoginResponse } from "@/types";
 import { login } from "@/actions/auth/login";
 import { LockIcon, MailIcon } from "../icons";
 
-export const Login = () => {
+export function Login() {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selected, setSelected] = useState<string | number>("user"); // Ensure state type is string | number
 
@@ -198,4 +198,4 @@ export const Login = () => {
       </Modal>
     </>
   );
-};
+}
