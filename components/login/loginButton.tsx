@@ -22,7 +22,7 @@ import { ErrorResponse, LoginResponse } from "@/types";
 import { login } from "@/actions/auth/login";
 import { LockIcon, MailIcon } from "../icons";
 
-export function Login() {
+export const LoginButton = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [selected, setSelected] = useState<string | number>("user"); // Ensure state type is string | number
 
@@ -198,4 +198,4 @@ export function Login() {
       </Modal>
     </>
   );
-}
+};

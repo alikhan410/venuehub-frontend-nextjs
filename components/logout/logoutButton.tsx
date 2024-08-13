@@ -3,7 +3,7 @@ import { logoutUser } from "@/actions/auth/logout";
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 
-export const Logout = () => {
+export const LogoutButton = () => {
   const router = useRouter();
   const handlePress = () => {
     logoutUser();

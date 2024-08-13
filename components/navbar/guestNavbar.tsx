@@ -6,9 +6,9 @@ import Link from "next/link";
 import { NavbarProps } from "@/types";
 import { ThemeSwitch } from "../theme-switch";
 
-import { Logout } from "../logout/logout";
+import { LogoutButton } from "../logout/logoutButton";
 import { Signup } from "../signup/signup";
-import { Login } from "../login/login";
+import { LoginButton } from "../login/loginButton";
 
 export const GuestNavbar = ({ setItemActive, item, currentUser }: NavbarProps) => {
   return (
@@ -63,7 +63,7 @@ export const GuestNavbar = ({ setItemActive, item, currentUser }: NavbarProps) =
       </NavbarContent>
       <NavbarContent justify="end">
         <ThemeSwitch />
-        <NavbarItem className="hidden lg:flex">{currentUser.isLogged ? <Logout /> : <Login />}</NavbarItem>
+        <NavbarItem className="hidden lg:flex">{currentUser.isLogged ? <LogoutButton /> : <LoginButton />}</NavbarItem>
         <NavbarItem>{currentUser.isLogged ? "" : <Signup />}</NavbarItem>
       </NavbarContent>
     </NextUINavbar>

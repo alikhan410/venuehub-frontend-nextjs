@@ -4,9 +4,9 @@ import { Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem } from "
 import Link from "next/link";
 import { NavbarProps } from "@/types";
 import { ThemeSwitch } from "../theme-switch";
-import { Login } from "../login/login";
-import { Logout } from "../logout/logout";
+import { LogoutButton } from "../logout/logoutButton";
 import { Signup } from "../signup/signup";
+import { LoginButton } from "../login/loginButton";
 
 export const UserNavbar = ({ setItemActive, item, currentUser }: NavbarProps) => {
   return (
@@ -54,8 +54,8 @@ export const UserNavbar = ({ setItemActive, item, currentUser }: NavbarProps) =>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
-        <ThemeSwitch/>
-        <NavbarItem className="hidden lg:flex">{currentUser.isLogged ? <Logout /> : <Login />}</NavbarItem>
+        <ThemeSwitch />
+        <NavbarItem className="hidden lg:flex">{currentUser.isLogged ? <LogoutButton /> : <LoginButton />}</NavbarItem>
         <NavbarItem>{currentUser.isLogged ? "" : <Signup />}</NavbarItem>
       </NavbarContent>
     </NextUINavbar>

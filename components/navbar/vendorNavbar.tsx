@@ -3,9 +3,9 @@ import React from "react";
 import { Link, Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem } from "@nextui-org/react";
 import { ThemeSwitch } from "../theme-switch";
 import { NavbarProps } from "@/types";
-import { Login } from "../login/login";
-import { Logout } from "../logout/logout";
+import { LogoutButton } from "../logout/logoutButton";
 import { Signup } from "../signup/signup";
+import { LoginButton } from "../login/loginButton";
 
 export const VendorNavbar = ({ setItemActive, item, currentUser }: NavbarProps) => {
   return (
@@ -75,7 +75,7 @@ export const VendorNavbar = ({ setItemActive, item, currentUser }: NavbarProps) 
       </NavbarContent>
       <NavbarContent justify="end">
         <ThemeSwitch />
-        <NavbarItem className="hidden lg:flex">{currentUser.isLogged ? <Logout /> : <Login />}</NavbarItem>
+        <NavbarItem className="hidden lg:flex">{currentUser.isLogged ? <LogoutButton /> : <LoginButton />}</NavbarItem>
         <NavbarItem>{currentUser.isLogged ? "" : <Signup />}</NavbarItem>
       </NavbarContent>
     </NextUINavbar>
