@@ -1,6 +1,18 @@
 import { VenueItemProp } from "@/types";
-import { Card, CardBody, CardFooter, Image } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  CardBody,
+  CardFooter,
+  Image,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/react";
+
 import Link from "next/link";
+import { EditVenueIcon, DeleteVenueIcon } from "../icons";
 
 export const VenueCard = function ({ venue }: { venue: VenueItemProp }) {
   return (
@@ -11,7 +23,7 @@ export const VenueCard = function ({ venue }: { venue: VenueItemProp }) {
         className="h-72 object-cover z-0"
         src={`${process.env.HOST}${venue.imageUris[0].uri}`}
       />
-      <div className="inset-x-0 top-0 flex justify-between px-4 pt-4 absolute"></div>
+
       <CardBody className="p-0 pt-3 pb-1 flex-row justify-between">
         <div>
           <Link href={`/venue/${venue.id}`} className="font-medium leading-5">

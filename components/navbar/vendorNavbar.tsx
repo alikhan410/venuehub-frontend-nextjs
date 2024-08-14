@@ -25,7 +25,7 @@ export const VendorNavbar = ({ setItemActive, item, currentUser }: NavbarProps) 
           <Link
             data-name="allvenues"
             color={item == "allvenues" ? "primary" : "foreground"}
-            href="/"
+            href="/venues"
             onClick={setItemActive}
           >
             All Venues
@@ -45,7 +45,7 @@ export const VendorNavbar = ({ setItemActive, item, currentUser }: NavbarProps) 
           <Link
             data-name="myvenues"
             color={item == "myvenues" ? "primary" : "foreground"}
-            href="/vendor/venue"
+            href="/vendor/venues"
             onClick={setItemActive}
           >
             My Venues
