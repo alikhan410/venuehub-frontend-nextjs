@@ -10,10 +10,7 @@ export const Footer = () => {
           <h1 className="text-2xl font-bold">
             <span className="text-slate-300">Venue</span>Hub
           </h1>
-          <p className="mt-4">
-            This is a simple modern footer created using React and Tailwind CSS. Customize it to fit your website's
-            design and requirements.
-          </p>
+          <p className="mt-4">Your go-to platform for discovering and booking the perfect venue for your events.</p>
         </div>
         <div className="mb-8 md:mb-0 md:w-1/3">
           <h2 className="text-xl font-semibold">Resources</h2>

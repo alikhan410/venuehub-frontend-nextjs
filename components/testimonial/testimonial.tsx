@@ -8,22 +8,22 @@ export const Testimonial = function () {
     <section className="flex flex-col mx-24">
       <div className="flex justify-between mb-24">
         <h2 className={title({ size: "md" })}>
-          What People are
+          User ratings and
           <br className="sm:block hidden" />
-          saying about us
+          testimonials
         </h2>
 
         <p className="text-lg">
-          Everything you need to accept card payments
+          What people are saying
           <br className="sm:block hidden" />
-          and grow your business anywhere on the planet.
+          about us.
         </p>
       </div>
       <Carousel>
         <CarouselContent>
           {data.map((el, i) => (
             <CarouselItem key={i}>
-              <FeedbackCard key={i} content={el.content} title={el.title} name={el.name} img={el.img} id={el.id} />
+              <FeedbackCard key={i} content={el.content} name={el.name} id={el.id} />
             </CarouselItem>
           ))}
         </CarouselContent>

@@ -66,8 +66,6 @@ export interface Feedback {
   id: String;
   content: String;
   name: String;
-  title: String;
-  img: String;
 }
 export enum PaymentStatus {
   "PAID",
