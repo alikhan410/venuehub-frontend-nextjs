@@ -12,8 +12,8 @@ export default function Page({ params }: { params: { id: number } }) {
   const [venue, setVenue] = useState<VenueItemProp>();
   const [error, setError] = useState<JSX.Element | null>(null);
   useEffect(() => {
-    const get = async (id: number) => {
-      const res = await getSingleVenue(id);
+    const get = async () => {
+      const res = await getSingleVenue(params.id);
 
       if ((res as ErrorResponse).error) {
         setError(<MyCustomError response={res as ErrorResponse} />);
@@ -23,7 +23,7 @@ export default function Page({ params }: { params: { id: number } }) {
       }
     };
 
-    get(params.id);
+    get();
   }, []);
 
   if (error) {

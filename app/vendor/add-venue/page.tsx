@@ -1,7 +1,6 @@
 "use client";
-import { ChevronLeft, PlusCircle, Upload, Users2 } from "lucide-react";
+import { ChevronLeft, PlusCircle, Upload } from "lucide-react";
 import React, { useState, useRef } from "react";
-import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Image,
@@ -18,15 +17,22 @@ import {
   Button,
   Input,
   Chip,
+  Link,
 } from "@nextui-org/react";
 import { Card, CardFooter, CardHeader, CardBody } from "@nextui-org/card";
 import { IconSelector } from "@/components/iconSelector/IconSelector";
+import { VenueItemProp } from "@/types";
+import { addVenue } from "@/actions/venue/addVenue";
+import { saveImage } from "@/actions/venue/saveImage";
+import { toast } from "sonner";
 
 export default function Page() {
-  // Explicitly typing the ref as an input element
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<JSX.Element | null>(null);
   const [rows, setRows] = useState([{ id: 1 }]);
+  const [imagesUrl, setImagesUrl] = useState<String[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
 
   const imageHandler = () => {
     if (fileInputRef.current) {
@@ -35,13 +41,35 @@ export default function Page() {
   };
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      console.log("Selected file:", file);
+    if (!files || files.length == 0) return;
+
+    //Checking if the uploaded files are upto 5 or less
+    if (files.length + f.length > 5) {
+      toast.warning("Limit reached", {
+        description: "Only upto 5 images are allowed. For uploading new images, delete the previous ones",
+      });
+      return;
     }
+
+    const urls: string[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const url = URL.createObjectURL(file);
+      urls.push(url);
+    }
+    setImagesUrl((prevImagesUrl) => [...prevImagesUrl, ...urls]);
+
+    setFiles((prevFiles) => {
+      const newFiles = [...prevFiles];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileURL = URL.createObjectURL(file);
+        newFiles.push(file);
+      }
+      return newFiles;
+    });
   };
   const addRow = () => {
-    console.log(rows.length);
     if (rows.length === 5) {
       setError(<Chip color="danger">Can't add more than 5</Chip>);
       return;
@@ -50,15 +78,111 @@ export default function Page() {
     setRows([...rows, { id: rows.length + 1 }]);
   };
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    setIsLoading(true);
     e.preventDefault();
+
     const formData = new FormData(e.currentTarget);
-    console.log(formData.get("title"));
-    console.log(formData.get("description"));
-    console.log(formData.getAll("service name"));
-    console.log(formData.getAll("service description"));
-    console.log(formData.get("guests"));
-    console.log(formData.get("booking fee"));
-    console.log(formData.get("venue type"));
+
+    //Whole lot of bunch of checks
+    const venueTitle = formData.get("VenueTitle")?.toString().trim();
+    const venueDescription = formData.get("VenueDescription")?.toString().trim();
+    const serviceNames = formData.getAll("serviceName").map((name) => name.toString().trim());
+    const serviceDescriptions = formData.getAll("serviceDescription").map((desc) => desc.toString().trim());
+    const guests = formData.get("guests")?.toString().trim();
+    const bookingFee = formData.get("bookingFee")?.toString().trim();
+    const venueType = formData.get("venueType")?.toString().trim();
+    const status = formData.get("venueStatus")?.toString().trim();
+    const location = formData.get("venueLocation")?.toString().trim();
+    const phone = formData.get("venuePhone")?.toString().trim();
+
+    const missingFields = [];
+
+    if (!venueTitle) missingFields.push("Venue Title");
+    if (!venueDescription) missingFields.push("Venue Description");
+    if (!guests) missingFields.push("Guests");
+    if (!bookingFee) missingFields.push("Booking Fee");
+    if (!venueType) missingFields.push("Venue Type");
+    if (!location) missingFields.push("Location");
+    if (!phone) missingFields.push("Phone");
+
+    if (!venueTitle || !venueDescription || !guests || !bookingFee || !venueType || !phone || !location) {
+      setIsLoading(false);
+      toast.error("Please fill the remain fields", { description: `Required fields: ${missingFields.join(", ")}` });
+      return;
+    }
+
+    if (status !== "ACTIVE" && status !== "DRAFT") {
+      setIsLoading(false);
+      toast.error("Invalid venue status");
+      return;
+    }
+
+    //images is [] bc we'll send the images separately and [] booking bc venue is just created, duh.
+    const newVenue: VenueItemProp = {
+      name: venueTitle,
+      description: venueDescription,
+      venueType: venueType,
+      capacity: guests,
+      estimate: bookingFee,
+      images: [],
+      bookings: [],
+      status: status,
+      phone: phone,
+      location: location,
+    };
+
+    //Checking if the files/images is upto the desired length
+    if (files.length < 5) {
+      setIsLoading(false);
+      toast.error("Error occurred", {
+        description: "Please select upto 5 images",
+      });
+      return;
+    }
+
+    //Preparing the images for sending
+    const imageData = new FormData();
+    files.forEach((file) => {
+      imageData.append("files", file);
+    });
+
+    // Reason for not using await is bc image endpoint is dependent upon addVenue response,
+    // not sure if its works with await, did'nt try.
+    addVenue(newVenue)
+      .then(async (res) => {
+        //Checking for any errors during adding of venue
+        if ("error" in res) {
+          setIsLoading(false);
+          toast.error(`Status: ${res.status}`, {
+            description: res.message,
+          });
+          return;
+        }
+
+        //Whether adding venue was successful or not
+        if (res.status !== "success") return;
+
+        //Sending the images to the venue service
+        const imageResponse = await saveImage(res.venueId, imageData);
+
+        //Checking for errors during image processing
+        if ("error" in imageResponse) {
+          setIsLoading(false);
+          toast.error(`Status: ${imageResponse.status}`, {
+            description: imageResponse.message,
+          });
+          return;
+        }
+
+        //setting the button loading state to false
+        setIsLoading(false);
+        toast.success("Congratulations 🎉", { description: "Venue has been created" });
+      })
+      .catch((error: Error) => {
+        toast.error(`Status: 500`, {
+          description: error.message,
+        });
+      });
   };
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -67,18 +191,18 @@ export default function Page() {
           <form onSubmit={submitHandler}>
             <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
               <div className="flex items-center gap-4">
-                <Button isIconOnly radius="sm" variant="ghost" className="h-7 w-7">
+                <Button isIconOnly as={Link} href="/vendor/venues" radius="sm" variant="ghost" className="h-7 w-7">
                   <ChevronLeft className="h-4 w-4" />
                   <span className="sr-only">Back</span>
                 </Button>
                 <h1 className="flex-1 shrink-0 whitespace-nowrap text-xl font-semibold tracking-tight sm:grow-0">
-                  Add a Venue
+                  Adding Venue
                 </h1>
                 <div className="hidden items-center gap-2 md:ml-auto md:flex">
                   <Button variant="flat" size="sm">
                     Discard
                   </Button>
-                  <Button variant="ghost" size="sm">
+                  <Button type="submit" isLoading={isLoading} variant="ghost" size="sm">
                     Save Venue
                   </Button>
                 </div>
@@ -87,13 +211,13 @@ export default function Page() {
                 <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Venue Details</CardTitle>
+                      <h2 className="font-medium">Venue Details</h2>
                     </CardHeader>
-                    <CardContent>
+                    <CardBody>
                       <div className="grid gap-6">
                         <div className="grid gap-3">
                           <Input
-                            name="title"
+                            name="VenueTitle"
                             labelPlacement="outside"
                             label="Venue Name"
                             size="md"
@@ -104,7 +228,7 @@ export default function Page() {
                         </div>
                         <div className="grid gap-3">
                           <Textarea
-                            name="description"
+                            name="VenueDescription"
                             label="Venue Description"
                             size="md"
                             labelPlacement="outside"
@@ -113,13 +237,13 @@ export default function Page() {
                           />
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>{" "}
+                    </CardBody>
+                  </Card>
                   <Card>
                     <CardHeader>
-                      <CardTitle>Venue Features and Services</CardTitle>
+                      <h2 className="font-medium">Venue Features and Services</h2>
                     </CardHeader>
-                    <CardContent>
+                    <CardBody>
                       <AnimatePresence>
                         <Table removeWrapper aria-label="Service table">
                           <TableHeader aria-label="Service Table Header">
@@ -142,7 +266,7 @@ export default function Page() {
                                     exit={{ opacity: 0, y: -10 }}
                                     transition={{ duration: 0.3 }}
                                   >
-                                    <Input size="sm" type="text" name="service name" />
+                                    <Input size="sm" type="text" name="serviceName" />
                                   </motion.div>
                                 </TableCell>
                                 <TableCell className="max-w-full">
@@ -153,7 +277,7 @@ export default function Page() {
                                     transition={{ duration: 0.3 }}
                                   >
                                     <Textarea
-                                      name="service description"
+                                      name="serviceDescription"
                                       size="sm"
                                       className="w-auto"
                                       variant="bordered"
@@ -176,7 +300,7 @@ export default function Page() {
                           </TableBody>
                         </Table>
                       </AnimatePresence>
-                    </CardContent>
+                    </CardBody>
                     <CardFooter className="justify-center border-t p-4">
                       <div className="flex flex-col gap-1">
                         {error ? error : ""}
@@ -187,23 +311,23 @@ export default function Page() {
                       </div>
                     </CardFooter>
                   </Card>
-                  <Card x-chunk="dashboard-07-chunk-2">
+                  <Card>
                     <CardHeader>
-                      <CardTitle>Venue Specifications</CardTitle>
+                      <h2 className="font-medium">Venue Specifications</h2>
                     </CardHeader>
-                    <CardContent>
+                    <CardBody>
                       <div className="grid gap-6 sm:grid-cols-3">
                         <div className="grid gap-3">
                           <Select
-                            name="venue type"
+                            name="venueType"
                             size="md"
                             label="Venue Category"
                             labelPlacement="outside"
                             placeholder="Select venue type"
                             className="max-w-xs"
                           >
-                            <SelectItem key={"hall"}>Hall</SelectItem>
-                            <SelectItem key={"banquet"}>Banquet</SelectItem>
+                            <SelectItem key={"Hall"}>Hall</SelectItem>
+                            <SelectItem key={"Banquet"}>Banquet</SelectItem>
                           </Select>
                         </div>
                         <div className="grid gap-3">
@@ -213,117 +337,158 @@ export default function Page() {
                             size="md"
                             label="Guests Capacity"
                             labelPlacement="outside"
-                            type={"number"}
+                            type="number"
                           />
                         </div>
                         <div className="grid gap-3">
                           <Input
-                            name="booking fee"
+                            name="bookingFee"
                             size="md"
                             placeholder=" "
                             label="Booking Fee"
                             labelPlacement="outside"
                             id="bookingFee"
                             endContent={" PKR"}
-                            type={"number"}
+                            type="number"
                           />
                         </div>
                       </div>
-                    </CardContent>
+                    </CardBody>
+                  </Card>
+                  <Card>
+                    <CardHeader>
+                      <h2 className="font-medium">Contact</h2>
+                    </CardHeader>
+                    <CardBody>
+                      <div className="grid gap-6 sm:grid-cols-3">
+                        <div className="grid gap-3">
+                          <Input
+                            name="venueLocation"
+                            placeholder=" "
+                            size="md"
+                            label="Location"
+                            labelPlacement="outside"
+                            type="text"
+                          />
+                        </div>
+                        <div className="grid gap-3">
+                          <Input
+                            name="venuePhone"
+                            size="md"
+                            placeholder=" "
+                            label="Phone Number"
+                            labelPlacement="outside"
+                            startContent="+92"
+                            type="phone"
+                          />
+                        </div>
+                      </div>
+                    </CardBody>
                   </Card>
                 </div>
                 <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Product Status</CardTitle>
+                      <h2 className="font-medium">Venue Status</h2>
                     </CardHeader>
-                    <CardContent>
+                    <CardBody>
                       <div className="grid gap-6">
                         <div className="grid gap-3">
                           <Select
+                            name="venueStatus"
                             size="md"
                             label="Status"
                             labelPlacement="outside"
                             placeholder="Select status"
                             className="max-w-xs"
                           >
-                            <SelectItem key={1} value="draft">
+                            <SelectItem key={"DRAFT"} value="DRAFT">
                               Draft
                             </SelectItem>
-                            <SelectItem key={2} value="published">
+                            <SelectItem key={"ACTIVE"} value="ACTIVE">
                               Active
-                            </SelectItem>
-                            <SelectItem key={3} value="archived">
-                              Archived
                             </SelectItem>
                           </Select>
                         </div>
                       </div>
-                    </CardContent>
+                    </CardBody>
                   </Card>
                   <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
                     <CardHeader>
-                      <CardTitle>Product Images</CardTitle>
-                      <CardDescription>Lipsum dolor sit amet, consectetur adipiscing elit</CardDescription>
+                      <h2 className="font-medium">Venue Images</h2>
                     </CardHeader>
-                    <CardContent>
+                    <CardBody>
                       <div className="grid gap-2">
-                        <Image
-                          alt="Product image"
-                          className="aspect-square w-full rounded-md object-cover"
-                          height="300"
-                          src={`${process.env.HOST}/images/vendor/grand-banquet/0-gb`}
-                          width="300"
-                        />
+                        {imagesUrl.length > 0 ? (
+                          <Image
+                            alt="Venue image"
+                            className="aspect-square w-full rounded-md object-cover"
+                            height="300"
+                            src={`${imagesUrl[0]}`}
+                            width="300"
+                          />
+                        ) : (
+                          <Image
+                            alt="Venue image"
+                            className="aspect-square w-full rounded-md object-cover"
+                            height="300"
+                            src="/placeholder-image.jpg"
+                            width="300"
+                          />
+                        )}
+
                         <div className="grid grid-cols-3 gap-2">
-                          <button>
-                            <Image
-                              alt="Product image"
-                              className="aspect-square w-full rounded-md object-cover"
-                              height="84"
-                              src={`${process.env.HOST}/images/vendor/grand-banquet/1-gb`}
-                              width="84"
-                            />
-                          </button>
-                          <button>
-                            <Image
-                              alt="Product image"
-                              className="aspect-square w-full rounded-md object-cover"
-                              height="84"
-                              src={`${process.env.HOST}/images/vendor/grand-banquet/2-gb`}
-                              width="84"
-                            />
-                          </button>
+                          {[...Array(2)].map((_, i) => {
+                            const index = i + 1;
+                            const imageSrc = imagesUrl[index] ? imagesUrl[index] : "/placeholder-image.jpg";
+                            const isOverlay = imagesUrl.length > 3 && index === 2; // Check if it's the last image with overlay
+
+                            return (
+                              <div key={index} className="relative">
+                                <img
+                                  alt="Venue image"
+                                  className={`aspect-square w-full rounded-md object-cover ${isOverlay ? "opacity-75" : ""}`}
+                                  height="84"
+                                  src={`${imageSrc}`}
+                                  width="84"
+                                />
+                                {isOverlay && (
+                                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white text-xs font-bold">
+                                    {/* Optional: Add any overlay text or content here */}
+                                    <span>{`+${imagesUrl.length - 3}`}</span>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                           <Button
                             onPress={imageHandler}
                             variant="ghost"
                             className="flex  aspect-square w-full h-full items-center justify-center rounded-md border border-dashed"
                           >
                             <Upload className="h-4 w-4 text-muted-foreground" />
-                            <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" />
+                            <input
+                              multiple
+                              type="file"
+                              ref={fileInputRef}
+                              onChange={handleFileChange}
+                              className="hidden"
+                            />
                             <span className="sr-only">Upload</span>
                           </Button>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                  <Card x-chunk="dashboard-07-chunk-5">
-                    <CardHeader>
-                      <CardTitle>Archive Product</CardTitle>
-                      <CardDescription>Lipsum dolor sit amet, consectetur adipiscing elit.</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div></div>
-                      <Button size="sm">Archive Product</Button>
-                    </CardContent>
+                    </CardBody>
                   </Card>
                 </div>
               </div>
               <div className="flex items-center justify-center gap-2 md:hidden">
-                <Button variant="bordered" size="sm">
+                <Button color="danger" variant="bordered" size="sm">
                   Discard
                 </Button>
-                <Button size="sm">Save Product</Button>
+                <Button color="success" type="submit" size="sm">
+                  Save Venue
+                </Button>
               </div>
             </div>
           </form>

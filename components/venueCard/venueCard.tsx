@@ -5,6 +5,7 @@ import {
   CardBody,
   CardFooter,
   Image,
+  Skeleton,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
@@ -12,17 +13,22 @@ import {
 } from "@nextui-org/react";
 
 import Link from "next/link";
-import { EditVenueIcon, DeleteVenueIcon } from "../icons";
 
 export const VenueCard = function ({ venue }: { venue: VenueItemProp }) {
   return (
     <Card radius="md" shadow="none" className="border-none bg-white dark:bg-black relative">
-      <Image
-        width="100%"
-        alt="Woman listing to music"
-        className="h-72 object-cover z-0"
-        src={`${process.env.HOST}${venue.imageUris[0].uri}`}
-      />
+      {venue.images.length > 0 ? (
+        <Image
+          width="100%"
+          alt="Woman listing to music"
+          className="h-72 object-cover z-0"
+          src={`${venue.images[0].url}`}
+        />
+      ) : (
+        <Skeleton className="rounded-lg" disableAnimation>
+          <div className="h-72 w-auto  bg-default-300"></div>
+        </Skeleton>
+      )}
 
       <CardBody className="p-0 pt-3 pb-1 flex-row justify-between">
         <div>

@@ -11,9 +11,7 @@ import { fontSans } from "@/config/fonts";
 import { Navbar } from "@/components/navbar/navbar";
 import { NavProvider } from "@/context/NavbarContext";
 import { getCurrentUser } from "@/actions/auth/getCurrentUser";
-import { NavbarOld } from "@/components/navbar/navbarOld";
 import { Footer } from "@/components/footer/footer";
-import Banner from "@/components/banner/banner";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {

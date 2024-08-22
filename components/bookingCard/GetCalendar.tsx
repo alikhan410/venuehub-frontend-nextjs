@@ -6,7 +6,6 @@ import { useLocale } from "@react-aria/i18n";
 import { BookingDates } from "@/types";
 
 export const GetCalendar = ({ dates }: { dates: BookingDates[] }) => {
-  Calendar;
   const now = today(getLocalTimeZone());
 
   // const disabledRanges = [now];
@@ -42,6 +41,7 @@ export const GetCalendar = ({ dates }: { dates: BookingDates[] }) => {
         color="danger"
         aria-label="Date (Unavailable)"
         isDateUnavailable={isDateUnavailable}
+        minValue={today(getLocalTimeZone())}
       />
     </div>
   );

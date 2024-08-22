@@ -82,36 +82,44 @@ export default function Page() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((d) => (
-                  <TableRow key={d.id} className="pb-6">
-                    <TableCell>
-                      <div className="font-medium">{d.bookingId}</div>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">{d.vendor}</TableCell>
-                    <TableCell className="hidden md:table-cell">{d.amount}</TableCell>
-
-                    <TableCell className="px-4  py-2 hidden sm:table-cell">
-                      <Chip size="sm" radius="sm" className={`text-xs font-extrabold ${colorMap[d.orderStatus]}`}>
-                        {OrderStatus[d.orderStatus]}
-                      </Chip>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {d.orderStatus == OrderStatus.PENDING ? (
-                        <Button
-                          onClick={(_e) => {
-                            clickHandler(d.id);
-                          }}
-                          color="primary"
-                          size="sm"
-                        >
-                          Pay
-                        </Button>
-                      ) : (
-                        "No action"
-                      )}
+                {data.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-6">
+                      No Orders
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  data.map((d) => (
+                    <TableRow key={d.id} className="pb-6">
+                      <TableCell>
+                        <div className="font-medium">{d.bookingId}</div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">{d.vendor}</TableCell>
+                      <TableCell className="hidden md:table-cell">{d.amount}</TableCell>
+
+                      <TableCell className="px-4  py-2 hidden sm:table-cell">
+                        <Chip size="sm" radius="sm" className={`text-xs font-extrabold ${colorMap[d.orderStatus]}`}>
+                          {OrderStatus[d.orderStatus]}
+                        </Chip>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {d.orderStatus == OrderStatus.PENDING ? (
+                          <Button
+                            onClick={(_e) => {
+                              clickHandler(d.id);
+                            }}
+                            color="primary"
+                            size="sm"
+                          >
+                            Pay
+                          </Button>
+                        ) : (
+                          "No action"
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </CardContent>

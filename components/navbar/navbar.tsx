@@ -1,6 +1,7 @@
 "use client";
 import { NavContext } from "@/context/NavbarContext";
 import { CurrentUserResponse } from "@/types";
+import { PressEvent } from "@react-types/shared";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -22,17 +23,16 @@ export const Navbar: React.FC<{ currentUser: CurrentUserResponse }> = ({ current
   const [item, setItem] = useState("");
 
   useEffect(() => {
-    console.log(localStorage.getItem("item"));
     const storageItem = localStorage.getItem("item");
     if (storageItem === null) return;
     setItem(storageItem);
   }, [refreshNavbar]);
 
-  const setItemActive = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    const newItem = e.currentTarget.getAttribute("data-name");
+  const setItemActive = (e: PressEvent) => {
+    const newItem = e.target.getAttribute("data-name");
     if (newItem == null) return;
     localStorage.setItem("item", newItem);
-    setItem(newItem); // Update state to trigger rerender
+    setItem(newItem);
   };
   return (
     <>

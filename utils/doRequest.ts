@@ -41,7 +41,7 @@ export const doRequest = async <T>({
     const data = await res.json();
     return data;
   } catch (error) {
-    logger.error("Exception caught");
+    logger.error(`Exception caught error: ${error instanceof Error ? error.message : String(error)}`);
     return { status: 503, error: "Internal Server Error", message: "Server is offline" };
   }
 };

@@ -1,5 +1,5 @@
 import { SVGProps } from "react";
-
+import { PressEvent } from "@react-types/shared";
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
@@ -43,7 +43,7 @@ export type VendorDetails = {
 };
 
 export type NavbarProps = {
-  setItemActive: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  setItemActive: (e: PressEvent) => void;
   item: String;
   currentUser: CurrentUserResponse;
 };
@@ -89,20 +89,24 @@ export interface VenuePropsList {
 }
 
 export interface VenueItemProp {
-  id: number;
+  id?: number;
   name: string;
+  username?: string;
+  description: string;
+  venueType: string;
   location: string;
-  capacity: number;
+  capacity: string;
+  images: Image[];
+  phone: string;
+  status: "ACTIVE" | "DRAFT";
   estimate: string;
-  imageUris: ImageUri[];
-  description: String;
-  username: string;
+  bookings: Booking[];
 }
 // export interface ImageUris {
 //   images: ImageUri[];
 // }
-export interface ImageUri {
-  uri: String;
+export interface Image {
+  url: String;
   id: number;
 }
 

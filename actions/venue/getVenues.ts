@@ -24,6 +24,5 @@ export const getVenues = async (): Promise<VenueItemProp[] | ErrorResponse> => {
   }
 
   const data = response as { venueList: VenueItemProp[] };
-
   return data.venueList;
 };

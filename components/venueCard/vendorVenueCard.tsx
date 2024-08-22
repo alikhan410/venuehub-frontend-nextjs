@@ -8,6 +8,8 @@ import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
+  Skeleton,
+  Chip,
   DropdownItem,
 } from "@nextui-org/react";
 
@@ -18,20 +20,50 @@ export const VendorVenueCard = function ({ venue }: { venue: VenueItemProp }) {
   const iconClasses = "text-xl text-default-500 pointer-events-none flex-shrink-0";
   return (
     <Card radius="md" shadow="none" className="border-none bg-white dark:bg-black relative">
-      <Image
-        width="100%"
-        alt="Woman listing to music"
-        className="h-72 object-cover z-0"
-        src={`${process.env.HOST}${venue.imageUris[0].uri}`}
-      />
-      {/* <div className="inset-x-0 top-0 flex justify-between px-4 pt-4 absolute"></div> */}{" "}
-      <div className="inset-x-0 top-0 flex justify-end px-4 pt-4 absolute">
+      {venue.images.length > 0 ? (
+        <Image width="100%" alt="Venue" className="h-72 object-cover z-0" src={`${venue.images[0].url}`} />
+      ) : (
+        <Skeleton className="rounded-lg" disableAnimation>
+          <div className="h-72 w-auto  bg-default-300"></div>
+        </Skeleton>
+      )}
+      <div className="inset-x-0 top-0 flex justify-between items-center px-4 pt-4 absolute">
+        {venue.status === "ACTIVE" ? (
+          <Chip
+            variant="dot"
+            color="success"
+            classNames={{
+              base: "bg-white dark:bg-black",
+              content: "",
+            }}
+          >
+            Active
+          </Chip>
+        ) : (
+          <Chip
+            variant="dot"
+            color="danger"
+            classNames={{
+              base: "bg-white dark:bg-black",
+              content: "",
+            }}
+          >
+            Draft
+          </Chip>
+        )}
+
         <div>
           <Dropdown>
             <DropdownTrigger>
-              <Button className="w-auto h-8 drop-shadow-md bg-white dark:bg-black px-4 py-1 shadow-lg font-normal align-center">
-                EDIT
-              </Button>
+              <Chip
+                variant="shadow"
+                classNames={{
+                  base: "bg-white dark:bg-black hover:cursor-pointer",
+                  content: "",
+                }}
+              >
+                Edit
+              </Chip>
             </DropdownTrigger>
             <DropdownMenu aria-label="Link Actions">
               <DropdownItem
@@ -46,7 +78,7 @@ export const VendorVenueCard = function ({ venue }: { venue: VenueItemProp }) {
                 className="text-danger"
                 color="danger"
                 startContent={<DeleteVenueIcon className={iconClasses} />}
-                href={`/venue/${venue.id}/edit`}
+                href={`/venue/${venue.id}/delete`}
               >
                 Delete venue
               </DropdownItem>

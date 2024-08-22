@@ -2,7 +2,7 @@
 import { getVenues } from "@/actions/venue/getVenues";
 import MyCustomError from "@/components/error/customError";
 import { CardGrid } from "@/components/venueCard/cardGrid";
-import { ErrorResponse, VenueItemProp, VenueProps, VenuePropsList } from "@/types";
+import { ErrorResponse, VenueItemProp } from "@/types";
 import { Spacer } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { data } from "./data";

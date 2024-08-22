@@ -11,22 +11,22 @@ export const VendorNavbar = ({ setItemActive, item, currentUser }: NavbarProps) 
   return (
     <NextUINavbar>
       <NavbarBrand>
-        <Link data-name="home" onClick={setItemActive} href="/" className="font-bold text-inherit">
+        <Link data-name="home" onPress={setItemActive} href="/" className="font-bold text-inherit">
           VENUEHUB
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem isActive={item == "home" ? true : false}>
-          <Link data-name color={item == "home" ? "primary" : "foreground"} href="/" onClick={setItemActive}>
+          <Link data-name="home" color={item == "home" ? "primary" : "foreground"} href="/" onPress={setItemActive}>
             Home
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={item == "allvenues" ? true : false}>
+        <NavbarItem isActive={item == "venues" ? true : false}>
           <Link
-            data-name="allvenues"
-            color={item == "allvenues" ? "primary" : "foreground"}
+            data-name="venues"
+            color={item == "venues" ? "primary" : "foreground"}
             href="/venues"
-            onClick={setItemActive}
+            onPress={setItemActive}
           >
             All Venues
           </Link>
@@ -36,28 +36,28 @@ export const VendorNavbar = ({ setItemActive, item, currentUser }: NavbarProps) 
             data-name="bookings"
             color={item == "bookings" ? "primary" : "foreground"}
             href="/vendor/bookings"
-            onClick={setItemActive}
+            onPress={setItemActive}
           >
             Bookings
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={item == "myvenues" ? true : false}>
+        <NavbarItem isActive={item == "vendorVenues" ? true : false}>
           <Link
-            data-name="myvenues"
-            color={item == "myvenues" ? "primary" : "foreground"}
+            data-name="VendorVenues"
+            color={item == "VendorVenues" ? "primary" : "foreground"}
             href="/vendor/venues"
-            onClick={setItemActive}
+            onPress={setItemActive}
           >
             My Venues
           </Link>
         </NavbarItem>
 
-        <NavbarItem isActive={item == "addvenue" ? true : false}>
+        <NavbarItem isActive={item == "addVenue" ? true : false}>
           <Link
-            data-name="addvenue"
-            color={item == "addvenue" ? "primary" : "foreground"}
+            data-name="addVenue"
+            color={item == "addVenue" ? "primary" : "foreground"}
             href="/vendor/add-venue"
-            onClick={setItemActive}
+            onPress={setItemActive}
           >
             Add Venue
           </Link>
@@ -67,7 +67,7 @@ export const VendorNavbar = ({ setItemActive, item, currentUser }: NavbarProps) 
             data-name="orders"
             color={item == "orders" ? "primary" : "foreground"}
             href="/vendor/orders"
-            onClick={setItemActive}
+            onPress={setItemActive}
           >
             Orders
           </Link>

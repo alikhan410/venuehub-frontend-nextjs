@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
-import { Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem } from "@nextui-org/react";
-import Link from "next/link";
+import { Navbar as NextUINavbar, NavbarBrand, NavbarContent, NavbarItem, Link } from "@nextui-org/react";
 import { NavbarProps } from "@/types";
 import { ThemeSwitch } from "../theme-switch";
 import { LogoutButton } from "../logout/logoutButton";
@@ -12,32 +11,32 @@ export const UserNavbar = ({ setItemActive, item, currentUser }: NavbarProps) =>
   return (
     <NextUINavbar>
       <NavbarBrand>
-        <Link data-name="home" href="/" onClick={setItemActive} className="font-bold text-inherit">
+        <Link data-name="home" href="/" onPress={setItemActive} className="font-bold text-inherit">
           VENUEHUB
         </Link>
       </NavbarBrand>
       <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem isActive={item == "home" ? true : false}>
-          <Link data-name="home" color={item == "home" ? "" : "foreground"} href="/" onClick={setItemActive}>
+          <Link data-name="home" color={item == "home" ? "primary" : "foreground"} href="/" onPress={setItemActive}>
             Home
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={item == "allvenues" ? true : false}>
+        <NavbarItem isActive={item == "venues" ? true : false}>
           <Link
-            data-name="allvenues"
-            color={item == "allvenues" ? "" : "foreground"}
+            data-name="venues"
+            color={item == "venues" ? "primary" : "foreground"}
             href="/venues"
-            onClick={setItemActive}
+            onPress={setItemActive}
           >
             All Venues
           </Link>
         </NavbarItem>
-        <NavbarItem isActive={item == "mybookings" ? true : false}>
+        <NavbarItem isActive={item == "bookings" ? true : false}>
           <Link
-            data-name="mybookings"
-            color={item == "mybookings" ? "" : "foreground"}
+            data-name="bookings"
+            color={item == "bookings" ? "primary" : "foreground"}
             href="/user/bookings"
-            onClick={setItemActive}
+            onPress={setItemActive}
           >
             My Bookings
           </Link>
@@ -45,9 +44,9 @@ export const UserNavbar = ({ setItemActive, item, currentUser }: NavbarProps) =>
         <NavbarItem isActive={item == "orders" ? true : false}>
           <Link
             data-name="orders"
-            color={item == "orders" ? "" : "foreground"}
+            color={item == "orders" ? "primary" : "foreground"}
             href="/user/orders"
-            onClick={setItemActive}
+            onPress={setItemActive}
           >
             Orders
           </Link>

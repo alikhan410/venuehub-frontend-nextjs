@@ -51,12 +51,6 @@ export default function Page() {
     return error;
   }
 
-  // if (data == null) {
-  //   <div className="mx-16 my-32 grid grid-cols-1 h-screen">
-  //     <Spinner />
-  //   </div>;
-  // }
-
   return (
     <div className="h-screen">
       {data == null ? (
@@ -81,22 +75,29 @@ export default function Page() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data.map((d) => (
-                  <TableRow key={d.bookingId} className="pb-6">
-                    <TableCell>
-                      <div className="font-medium">{d.venueName}</div>
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">{d.username}</TableCell>
-                    <TableCell className="hidden sm:table-cell">{d.bookingDate}</TableCell>
-                    <TableCell className="hidden md:table-cell">{calculateTimeLeft(d.reservationExpiry)}</TableCell>
-
-                    <TableCell className="px-4  py-2">
-                      <Chip size="sm" radius="sm" className={`text-xs font-extrabold ${colorMap[d.status]}`}>
-                        {BookingStatus[d.status]}
-                      </Chip>
+                {data.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-6">
+                      No Bookings
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  data.map((d) => (
+                    <TableRow key={d.bookingId} className="pb-6">
+                      <TableCell>
+                        <div className="font-medium">{d.venueName}</div>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">{d.username}</TableCell>
+                      <TableCell className="hidden sm:table-cell">{d.bookingDate}</TableCell>
+                      <TableCell className="hidden md:table-cell">{calculateTimeLeft(d.reservationExpiry)}</TableCell>
+                      <TableCell className="px-4 py-2">
+                        <Chip size="sm" radius="sm" className={`text-xs font-extrabold ${colorMap[d.status]}`}>
+                          {BookingStatus[d.status]}
+                        </Chip>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </CardContent>
