@@ -40,8 +40,8 @@ export default function Page() {
     }
   };
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length == 0) return;
+    const f = event.target.files;
+    if (!f || f.length == 0) return;
 
     //Checking if the uploaded files are upto 5 or less
     if (files.length + f.length > 5) {
@@ -52,8 +52,8 @@ export default function Page() {
     }
 
     const urls: string[] = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    for (let i = 0; i < f.length; i++) {
+      const file = f[i];
       const url = URL.createObjectURL(file);
       urls.push(url);
     }
@@ -61,9 +61,8 @@ export default function Page() {
 
     setFiles((prevFiles) => {
       const newFiles = [...prevFiles];
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const fileURL = URL.createObjectURL(file);
+      for (let i = 0; i < f.length; i++) {
+        const file = f[i];
         newFiles.push(file);
       }
       return newFiles;
