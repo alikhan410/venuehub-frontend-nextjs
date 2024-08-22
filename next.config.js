@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  env: { HOST: "http://localhost:8181" },
+  env: { HOST: "https://venuehub-gateway.onrender.com" },
   images: {
     domains: ["images.unsplash.com"],
   },
