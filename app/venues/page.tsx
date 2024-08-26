@@ -28,8 +28,7 @@ export default function Page() {
   if (venueList.length === 0) {
     return (
       <div className="mx-16 grid grid-cols-1 h-screen">
-        <Spinner />
-        <p>Hold on ✋ the service is currently inactive, it may take a couple of minutes for it to boot up</p>
+        <Spinner label="Hold on ✋ the service is currently inactive, it may take a couple of minutes for it to boot up" />
       </div>
     );
   }
