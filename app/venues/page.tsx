@@ -5,7 +5,7 @@ import { CardGrid } from "@/components/venueCard/cardGrid";
 import { ErrorResponse, VenueItemProp } from "@/types";
 import { Spacer } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
-import { data } from "./data";
+import { Spinner } from "@nextui-org/react";
 
 export default function Page() {
   const [venueList, setVenueList] = useState<VenueItemProp[]>([]);
@@ -24,6 +24,16 @@ export default function Page() {
 
     callApi();
   }, []);
+
+  if (venueList.length === 0) {
+    return (
+      <div className="mx-16 grid grid-cols-1 h-screen">
+        <Spinner />
+        <p>Hold on ✋ the service is currently inactive, it may take a couple of minutes for it to boot up</p>
+      </div>
+    );
+  }
+
   return (
     <>
       {error ? error : ""}
