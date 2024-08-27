@@ -8,6 +8,10 @@ import { useSearchParams } from "next/navigation";
 import { addBooking } from "@/actions/booking/addBooking";
 import { AddBookingBody, BookingStatus, ErrorResponse } from "@/types";
 
+import { Suspense } from "react";
+
+
+
 export default function ReservationForm() {
   const searchParams = useSearchParams();
 
