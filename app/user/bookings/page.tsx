@@ -62,14 +62,19 @@ export default function Page() {
   };
 
   if (error) {
-    return error;
+    return <div className="h-screen">{error}</div>;
   }
 
   return (
     <div className="h-screen">
       {data == null ? (
-        <div className="mx-16 grid grid-cols-1">
-          <Spinner />
+        <div className=" flex items-center justify-center">
+          <div className="mx-16">
+            <Spinner
+              size="lg"
+              label="Hold on ✋ the service is currently inactive, it may take a couple of minutes for it to boot up"
+            />
+          </div>
         </div>
       ) : (
         <Card x-chunk="dashboard-05-chunk-3" className="mb-8">

@@ -1,8 +1,6 @@
-import { DeleteIcon } from "../icons";
-
 export default function Banner() {
   return (
-    <div className="relative isolate flex items-center gap-x-6 overflow-hidden px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+    <div className="relative isolate z-10 flex items-center gap-x-6 overflow-hidden px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
       <div
         aria-hidden="true"
         className="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
@@ -29,17 +27,18 @@ export default function Banner() {
       </div>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <p className="text-sm leading-6 ">
-          <strong className="font-semibold">VenueHub Expo 2024</strong>
+          <strong className="font-semibold">Important Notice 🚨</strong>
           <svg viewBox="0 0 2 2" aria-hidden="true" className="mx-2 inline h-0.5 w-0.5 fill-current">
             <circle r={1} cx={1} cy={1} />
           </svg>
-          Join us in Karachi, December 15–17, for the latest in venue booking tech.
+          Backend is hosted on render, you will experience delay for a couple of requests.
         </p>
         <a
-          href="#"
-          className="flex-none rounded-full bg-indigo-300 dark:bg-indigo-500  px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+          href="https://docs.render.com/free#spinning-down-on-idle"
+          target={"_blank"}
+          className="flex-none rounded-full bg-indigo-300 dark:bg-indigo-500 px-3.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
         >
-          Learn more <span aria-hidden="true">&rarr;</span>
+          Why? <span aria-hidden="true">&rarr;</span>
         </a>
       </div>
       <div className="flex flex-1 justify-end"></div>

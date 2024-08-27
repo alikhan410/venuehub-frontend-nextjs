@@ -13,6 +13,8 @@ import { NavProvider } from "@/context/NavbarContext";
 import { getCurrentUser } from "@/actions/auth/getCurrentUser";
 import { Footer } from "@/components/footer/footer";
 import { Toaster } from "@/components/ui/sonner";
+import Banner from "@/components/banner/banner";
+import { startServices } from "@/actions/startServices";
 
 export const metadata: Metadata = {
   title: {
@@ -38,13 +40,20 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const services = localStorage.getItem("services");
+  if (!services) {
+    //The purpose for this api call is to Start the dormant services hosted on Render
+    startServices();
+    localStorage.setItem("services", "started");
+  }
+
   const currentUser = await getCurrentUser();
   return (
     <html suppressHydrationWarning lang="en">
       <head />
       <body className={clsx("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          {/* <Banner /> */}
+          <Banner />
           <NavProvider>
             <div className="relative flex flex-col h-screen">
               <Navbar currentUser={currentUser} />
