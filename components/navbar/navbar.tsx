@@ -23,14 +23,13 @@ export const Navbar: React.FC<{ currentUser: CurrentUserResponse }> = ({ current
 
   const [item, setItem] = useState("");
 
-  const services = localStorage.getItem("services");
-  if (!services) {
-    //The purpose for this api call is to Start the dormant services hosted on Render
-    startServices();
-    localStorage.setItem("services", "started");
-  }
-
   useEffect(() => {
+    const services = localStorage.getItem("services");
+    if (!services) {
+      //The purpose for this api call is to Start the dormant services hosted on Render
+      startServices();
+      localStorage.setItem("services", "started");
+    }
     const storageItem = localStorage.getItem("item");
     if (storageItem === null) return;
     setItem(storageItem);
