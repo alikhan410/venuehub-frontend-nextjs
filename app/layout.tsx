@@ -40,14 +40,9 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const services = localStorage.getItem("services");
-  if (!services) {
-    //The purpose for this api call is to Start the dormant services hosted on Render
-    startServices();
-    localStorage.setItem("services", "started");
-  }
 
   const currentUser = await getCurrentUser();
+
   return (
     <html suppressHydrationWarning lang="en">
       <head />

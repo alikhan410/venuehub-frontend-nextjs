@@ -1,4 +1,5 @@
 "use client";
+import { startServices } from "@/actions/startServices";
 import { NavContext } from "@/context/NavbarContext";
 import { CurrentUserResponse } from "@/types";
 import { PressEvent } from "@react-types/shared";
@@ -21,6 +22,13 @@ export const Navbar: React.FC<{ currentUser: CurrentUserResponse }> = ({ current
   const { refreshNavbar } = navContext;
 
   const [item, setItem] = useState("");
+
+  const services = localStorage.getItem("services");
+  if (!services) {
+    //The purpose for this api call is to Start the dormant services hosted on Render
+    startServices();
+    localStorage.setItem("services", "started");
+  }
 
   useEffect(() => {
     const storageItem = localStorage.getItem("item");
